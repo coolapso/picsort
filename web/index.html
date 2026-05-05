@@ -11,16 +11,18 @@
       content="image sorter, picture organizer, keyboard shortcuts, photo management, computer vision, dataset preparation, open source"
     />
     <script>
-      <!-- On page load or when changing themes, best to add inline in `head` to avoid FOUC -->
-      if (
-        localStorage.getItem("theme") === "dark" ||
-        (!("theme" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      try {
+        if (
+          localStorage.getItem("theme") === "dark" ||
+          (!("theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      } catch (e) {}
     </script>
     <link rel="stylesheet" href="static/css/main.css" />
     <link
@@ -74,30 +76,29 @@
 
         if (!arrowContainer || !downloadsSection) return;
 
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                // User has scrolled down to downloads
-                arrowContainer.classList.remove("absolute", "bottom-0");
-                arrowContainer.classList.add("fixed", "top-0", "bg-gray-100", "dark:bg-gray-900", "rounded-b-lg", "px-4", "py-2", "shadow-md");
-                arrowIcon.classList.add("rotate-180");
-                arrowLink.href = "#hero";
-                if (heroContactIcons) heroContactIcons.classList.add("opacity-0");
-              } else {
-                // User is at the hero section
-                arrowContainer.classList.remove("fixed", "top-0", "bg-gray-100", "dark:bg-gray-900", "rounded-b-lg", "px-4", "py-2", "shadow-md");
-                arrowContainer.classList.add("absolute", "bottom-0");
-                arrowIcon.classList.remove("rotate-180");
-                arrowLink.href = "#downloads";
-                if (heroContactIcons) heroContactIcons.classList.remove("opacity-0");
-              }
-            });
-          },
-          { threshold: 0.1 },
-        ); // Trigger when 10% of downloads section is visible
+        const handleScroll = () => {
+          // Trigger based on scroll position rather than IntersectionObserver 
+          // to avoid aggressive fingerprinting shield blocks in browsers like Brave
+          if (window.scrollY > window.innerHeight * 0.25) {
+            // User has scrolled down
+            arrowContainer.classList.remove("absolute", "bottom-0");
+            arrowContainer.classList.add("fixed", "top-0", "bg-gray-100", "dark:bg-gray-900", "rounded-b-lg", "px-4", "py-2", "shadow-md");
+            arrowIcon.classList.add("rotate-180");
+            arrowLink.href = "#hero";
+            if (heroContactIcons) heroContactIcons.classList.add("opacity-0");
+          } else {
+            // User is at the hero section
+            arrowContainer.classList.remove("fixed", "top-0", "bg-gray-100", "dark:bg-gray-900", "rounded-b-lg", "px-4", "py-2", "shadow-md");
+            arrowContainer.classList.add("absolute", "bottom-0");
+            arrowIcon.classList.remove("rotate-180");
+            arrowLink.href = "#downloads";
+            if (heroContactIcons) heroContactIcons.classList.remove("opacity-0");
+          }
+        };
 
-        observer.observe(downloadsSection);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        window.addEventListener("resize", handleScroll, { passive: true });
+        handleScroll(); // Initial check
       });
     </script>
   </head>
@@ -131,7 +132,7 @@
             <div class="relative w-full" style="padding-top: 56.25%">
               <iframe
                 class="absolute top-0 left-0 w-full h-full rounded-lg shadow-2xl"
-                src="https://www.youtube.com/embed/HdG0HuAClu0"
+                src="https://www.youtube-nocookie.com/embed/HdG0HuAClu0"
                 title="YouTube video player"
                 frameborder="0"
                 allow="
