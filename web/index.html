@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <title>PicSort</title>
     <meta
@@ -10,20 +10,6 @@
       name="keywords"
       content="image sorter, picture organizer, keyboard shortcuts, photo management, computer vision, dataset preparation, open source"
     />
-    <script>
-      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-      try {
-        if (
-          localStorage.getItem("theme") === "dark" ||
-          (!("theme" in localStorage) &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-      } catch (e) {}
-    </script>
     <link rel="stylesheet" href="static/css/main.css" />
     <link
       rel="apple-touch-icon"
