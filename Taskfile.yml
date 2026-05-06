@@ -8,3 +8,6 @@ tasks:
     cmds:
     - if [[ ! -d test/data ]]; then mkdir -p test/data; fi
     - air
+  deploy-web:
+    cmds:
+      - wrangler --cwd web pages deploy --project-name picsort .
